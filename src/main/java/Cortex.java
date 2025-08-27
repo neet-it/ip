@@ -71,7 +71,28 @@ public class Cortex {
                 }
 
 
-            }else {
+            }else if(command.startsWith("delete")) {
+                try {
+                    int i = Integer.parseInt(command.substring(7).trim()) - 1;
+
+                    if(i < 0 || i >= list.size()) {
+                        System.out.println("\t" + "Invalid Task! Cannot delete task.");
+                    } else {
+                        Task t = list.get(i);
+                        list.remove(i);
+
+                        System.out.println("\t" + "Noted. I've removed this task:");
+                        System.out.println("\t" + t);
+                        System.out.println("\t" +  "Now you have " + list.size() + " tasks in the list.");
+                    }
+
+                } catch (NumberFormatException e) {
+                    System.out.println("\t" + "Invalid Task! Cannot unmark task.");
+                } catch (IndexOutOfBoundsException e) {
+                    System.out.println("\t" + "Invalid Task! Cannot unmark task.");
+                }
+
+            } else {
                 Task task = new Task(command);
                 boolean isValidTask = false;
                 int c = 0;
