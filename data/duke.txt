@@ -1,0 +1,4 @@
+T | 0 | here
+T | 0 | here
+D | 0 | here /by when
+E | 0 | here /from  4  /to  5

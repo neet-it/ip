@@ -19,7 +19,7 @@
 	__________________________________________________
 	__________________________________________________
 	Got it. I've added this task:
-	[D][ ] project meeting (from:  Aug 6th 2pm  to:  4pm)
+	[E][ ] project meeting (from:  Aug 6th 2pm  to:  4pm)
 	Now you have 4 tasks in the list.
 	__________________________________________________
 	__________________________________________________
@@ -36,7 +36,7 @@
 	1. [T][X] borrow book
 	2. [T][ ] read book
 	3. [D][ ] return book (by: June 6th)
-	4. [D][ ] project meeting (from:  Aug 6th 2pm  to:  4pm)
+	4. [E][ ] project meeting (from:  Aug 6th 2pm  to:  4pm)
 	5. [T][ ] join sports club
 	__________________________________________________
 	__________________________________________________
