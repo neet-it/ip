@@ -10,4 +10,9 @@ public class Todo extends Task {
     public String toString() {
         return "[T]" + super.toString();
     }
+
+    public String toFileString() {
+        return "T | " + (this.isDone? "1" : "0") + " | " + this;
+    }
+
 }

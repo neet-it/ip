@@ -1,9 +1,17 @@
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 
 public class Cortex {
     public ArrayList<Task> list;
     public Scanner sc;
+
 
     public Cortex() {
         list = new ArrayList<>();
