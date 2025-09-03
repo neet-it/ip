@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Scanner;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -7,14 +6,14 @@ import java.time.format.DateTimeParseException;
 
 public class Cortex {
     public ArrayList<Task> list;
-    public Scanner sc;
-    public Storage storage;
+    private Storage storage;
+    private Ui ui;
 
 
     public Cortex() {
-        this.sc = new Scanner(System.in);
         this.storage = new Storage("./data/duke.txt");
         this.list = storage.loadtasks();
+        ui = new Ui();
 
     }
     public static void main(String[] args) {
@@ -26,21 +25,18 @@ public class Cortex {
      * Starts the chatbot.
      */
     public void run() {
-        String line = "__________________________________________________";
 
-        System.out.println("\t" + line);
-        System.out.println("\t" + "Hello! I'm Cortex");
-        System.out.println("\t" + "What can I do for you?");
-        System.out.println("\t" + line);
 
-        String command = sc.nextLine().trim();
+        ui.printHello();
+
+        String command = ui.readCommand();
 
 
         while (!command.equalsIgnoreCase("bye")) {
-            System.out.println("\t" + line);
+            ui.printHorizontalLine();
 
             if (command.equalsIgnoreCase("list")) {
-                printList();
+                ui.printList(list);
 
             } else if (command.startsWith("mark")) {
                 markTask(command);
@@ -62,7 +58,7 @@ public class Cortex {
                         task = new Todo(s);
                         isValidTask = true;
                     } catch (Exception e){
-                        System.out.println("\t" + "INVALID TODO TASK");
+                        ui.printError("INVALID TODO TASK");
                     }
 
                 } else if (command.startsWith("deadline")) {
@@ -82,8 +78,7 @@ public class Cortex {
 
                         isValidTask = true;
                     } catch (Exception e) {
-                        System.out.println("\t" + "INVALID DEADLINE TASK.");
-                        System.out.println("\t" + "deadline <task> /by ");
+                        ui.printError("INVALID DEADLINE TASK");
                     }
 
                 } else if (command.startsWith("event")) {
@@ -107,41 +102,27 @@ public class Cortex {
                         
                         isValidTask = true;
                     } catch (Exception e) {
-                        System.out.println("\t" + "INVALID EVENT TASK");
+                        ui.printError("INVALID EVENT TASK");
                     }
                 }
 
                 if(isValidTask) {
                     addTask(task);
                 } else if (c == 0){
-                    System.out.println("\t" + "INVALID TASK TYPE");
+                    ui.printError("INVALID TASK TYPE");
                 }
 
             }
 
-            System.out.println("\t" + line);
-            command = sc.nextLine().trim();
+            ui.printHorizontalLine();
+            command = ui.readCommand();
         }
 
-        System.out.println("\t" +line);
-        System.out.println("\t" +"Bye. Hope to see you again soon!");
-        System.out.println("\t" +line);
+        ui.printBye();
     }
 
-    /**
-     * Prints the list of tasks.
-     */
-    public void printList() {
-        if (list.isEmpty()) {
-            System.out.println("\t" + "There are no tasks in your list.");
-        } else {
-            System.out.println("\t" + "Here are the tasks in your list:");
-            int c = 1;
-            for (Task t : list) {
-                System.out.println("\t" + c++ + ". " + t);
-            }
-        }
-    }
+
+
 
     /**
      * Marks a task as done if the task number exists and update task file.
@@ -152,19 +133,17 @@ public class Cortex {
         try {
             int  i= Integer.parseInt(command.substring(5).trim()) - 1;
             if(i < 0 || i >= list.size()) {
-                System.out.println("\t" + "Invalid Task! Cannot mark task.");
+                ui.printError("Invalid Task! Cannot mark task.");
             } else {
                 Task t = list.get(i);
 
                 t.markAsDone();
-
-                System.out.println("\t" + "Nice! I've marked this task as done:");
-                System.out.println("\t" + t);
+                ui.printMarked(t);
             }
         } catch (NumberFormatException e) {
-            System.out.println("\t" + "Invalid Task! Cannot mark task.");
+            ui.printError("Invalid Task! Cannot mark task.");
         } catch (IndexOutOfBoundsException e) {
-            System.out.println("\t" + "Invalid Task! Cannot mark task.");
+            ui.printError("Invalid Task! Cannot mark task.");
         }
 
         storage.saveTasks(list);
@@ -180,20 +159,18 @@ public class Cortex {
             int i = Integer.parseInt(command.substring(7).trim()) - 1;
 
             if(i < 0 || i >= list.size()) {
-                System.out.println("\t" + "Invalid Task! Cannot unmark task.");
+                ui.printError("Invalid Task! Cannot unmark task.");
             } else {
                 Task t = list.get(i);
 
                 t.unmarkAsDone();
-
-                System.out.println("\t" + "OK, I've marked this task as not done yet:");
-                System.out.println("\t" + t);
+                ui.printUnmarked(t);
             }
 
         } catch (NumberFormatException e) {
-            System.out.println("\t" + "Invalid Task! Cannot unmark task.");
+            ui.printError("Invalid Task! Cannot unmark task.");
         } catch (IndexOutOfBoundsException e) {
-            System.out.println("\t" + "Invalid Task! Cannot unmark task.");
+            ui.printError("Invalid Task! Cannot unmark task.");
         }
         storage.saveTasks(list);
 
@@ -209,20 +186,17 @@ public class Cortex {
             int i = Integer.parseInt(command.substring(7).trim()) - 1;
 
             if(i < 0 || i >= list.size()) {
-                System.out.println("\t" + "Invalid Task! Cannot delete task.");
+                ui.printError("Invalid Task! Cannot delete task.");
             } else {
                 Task t = list.get(i);
                 list.remove(i);
-
-                System.out.println("\t" + "Noted. I've removed this task:");
-                System.out.println("\t" + t);
-                System.out.println("\t" +  "Now you have " + list.size() + " tasks in the list.");
+               ui.printDeletedTask(t, list);
             }
 
         } catch (NumberFormatException e) {
-            System.out.println("\t" + "Invalid Task! Cannot unmark task.");
+            ui.printError("Invalid Task! Cannot unmark task.");
         } catch (IndexOutOfBoundsException e) {
-            System.out.println("\t" + "Invalid Task! Cannot unmark task.");
+            ui.printError("Invalid Task! Cannot unmark task.");
         }
 
         storage.saveTasks(list);
@@ -235,10 +209,7 @@ public class Cortex {
      */
     public void addTask(Task task) {
         list.add(task);
-        System.out.println("\t" + "Got it. I've added this task:");
-        System.out.println("\t" + task);
-        System.out.println("\t" + "Now you have " + list.size() + " tasks in the list.");
-
+        ui.printAddedTask(task, list);
         storage.saveTasks(list);
     }
 
