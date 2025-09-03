@@ -12,7 +12,7 @@ public class Todo extends Task {
     }
 
     public String toFileString() {
-        return "T | " + (this.isDone? "1" : "0") + " | " + this;
+        return "T" + super.toFileString();
     }
 
 }

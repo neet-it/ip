@@ -28,6 +28,6 @@ public class Task {
     }
 
     public String toFileString() {
-        return this.toString();
+        return " | " + (isDone ? "1" : "0") + " | " + this.description;
     }
 }

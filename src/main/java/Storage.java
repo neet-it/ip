@@ -15,6 +15,9 @@ public class Storage {
         this.filepath = filepath;
     }
 
+    /**
+     * Saves the tasks in the file.
+     */
     public ArrayList<Task> loadtasks() {
         ArrayList<Task> list = new ArrayList<>();
         Path path = Paths.get(filepath);
@@ -41,6 +44,11 @@ public class Storage {
         return list;
     }
 
+    /**
+     * Updates the  task file.
+     *
+     * @param list stores the new arraylist of tasks to store in the file.
+     */
     public void saveTasks(ArrayList<Task> list) {
         try {
             File dir = new File("./data");
@@ -59,6 +67,11 @@ public class Storage {
         }
     }
 
+    /**
+     * Converts the file string into task objects.
+     *
+     * @param line stores the task string to be converted into objects.
+     */
     public Task parseTask(String line) {
         String[] parts = line.split(" \\| ");
         if (parts.length < 3) return null;

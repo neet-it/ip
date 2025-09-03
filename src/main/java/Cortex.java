@@ -1,21 +1,17 @@
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 
 public class Cortex {
     public ArrayList<Task> list;
     public Scanner sc;
+    public Storage storage;
 
 
     public Cortex() {
-        list = new ArrayList<>();
-        sc = new Scanner(System.in);
+        this.sc = new Scanner(System.in);
+        this.storage = new Storage("./data/duke.txt");
+        this.list = storage.loadtasks();
+
     }
     public static void main(String[] args) {
         Cortex ob = new Cortex();
@@ -131,7 +127,7 @@ public class Cortex {
     }
 
     /**
-     * Marks a task as done if the task number exists.
+     * Marks a task as done if the task number exists and update task file.
      *
      * @param command contains the information of the task number.
      */
@@ -153,10 +149,12 @@ public class Cortex {
         } catch (IndexOutOfBoundsException e) {
             System.out.println("\t" + "Invalid Task! Cannot mark task.");
         }
+
+        storage.saveTasks(list);
     }
 
     /**
-     * Unmarks a task if the task number exists.
+     * Unmarks a task if the task number exists and updates task file.
      *
      * @param command contains the information of the task number.
      */
@@ -180,14 +178,14 @@ public class Cortex {
         } catch (IndexOutOfBoundsException e) {
             System.out.println("\t" + "Invalid Task! Cannot unmark task.");
         }
-
+        storage.saveTasks(list);
 
     }
 
     /**
      * Deletes a task as done if the task number exists.
      *
-     * @param command contains the information of the task number.
+     * @param command contains the information of the task number and updates task fileli.
      */
     public void deleteTask(String command) {
         try {
@@ -209,10 +207,12 @@ public class Cortex {
         } catch (IndexOutOfBoundsException e) {
             System.out.println("\t" + "Invalid Task! Cannot unmark task.");
         }
+
+        storage.saveTasks(list);
     }
 
     /**
-     * Adds a task to the list of tasks.
+     * Adds a task to the list of tasks and the task file.
      *
      * @param task the Task object needed to be added to list.
      */
@@ -221,5 +221,7 @@ public class Cortex {
         System.out.println("\t" + "Got it. I've added this task:");
         System.out.println("\t" + task);
         System.out.println("\t" + "Now you have " + list.size() + " tasks in the list.");
+
+        storage.saveTasks(list);
     }
 }

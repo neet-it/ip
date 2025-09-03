@@ -14,6 +14,6 @@ public class Event extends Task {
         return "[E]" + super.toString() + " (from: " + this.from + " to: " + this.to + ")";
     }
     public String toFileString() {
-        return "E | " + (this.isDone? "1" : "0") + " | " + this;
+        return "E" + super.toFileString() + " /from " + this.from + " /to " + this.to;
     }
 }
