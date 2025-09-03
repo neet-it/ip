@@ -248,7 +248,6 @@ public class Cortex {
      * @param timeString to store the time as a string.
      * @throws DateTimeParseException if the timeString is invalid time format.
      */
-
     public LocalDateTime parseDateTime(String timeString) throws DateTimeParseException {
         timeString = timeString.trim();
 
