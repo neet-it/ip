@@ -1,40 +1,45 @@
+package duke;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class Deadline extends Task {
+public class Event extends Task {
 
-    protected LocalDateTime byDateTime;
-    protected String by;
+    protected String from;
+    protected String to;
+    protected LocalDateTime fromDateTime;
+    protected LocalDateTime toDateTime;
     public boolean isDateTime;
 
-    public Deadline(String description, LocalDateTime byDateTime) {
+    public Event(String description, String from, String to) {
         super(description);
-        this.byDateTime = byDateTime;
-        this.isDateTime = true;
+        this.from = from;
+        this.to = to;
+        isDateTime = false;
     }
 
-    public Deadline(String description, String by) {
+    public Event(String description,LocalDateTime fromDateTime , LocalDateTime toDateTime) {
         super(description);
-        this.by = by;
-        this.isDateTime = false;
+        this.fromDateTime = fromDateTime;
+        this.toDateTime = toDateTime;
+        isDateTime = true;
     }
 
     @Override
     public String toString() {
         if(isDateTime) {
-            return "[D]" + super.toString() + " (by: " + formatDateTimeWithOrdinal(this.byDateTime) + ")";
+            return "[E]" + super.toString() + " (from: " + formatDateTimeWithOrdinal(this.fromDateTime)
+                    + " to: " + formatDateTimeWithOrdinal(this.toDateTime) + ")";
         } else {
-            return "[D]" + super.toString() + " (by: " + this.by + ")";
+            return "[E]" + super.toString() + " (from: " + this.from + " to: " + this.to + ")";
         }
     }
-
     public String toFileString() {
         if(isDateTime) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
-            return "D" + super.toFileString() + this.byDateTime.format(formatter);
+            return "E" +  super.toFileString() + fromDateTime.format(formatter) + " | " + toDateTime.format(formatter);
 
         } else {
-            return "D" + super.toFileString() + " /by " + this.by;
+            return "E" + super.toFileString() + " /from " + this.from + " /to " + this.to;
         }
     }
 
