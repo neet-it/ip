@@ -1,9 +1,1 @@
-D | 1 | return book /by 2/12/2019 18002/12/2019 1800 /by 2/12/2019 18002/12/2019 1800
-D | 1 | hh /by tom /by tom /by tom
-D | 0 | return book /by 2/12/2019 18002/12/2019 1800 /by 2/12/2019 18002/12/2019 1800
-D | 0 | return book /by 2/12/2019 18002/12/2019 1800 /by 2/12/2019 18002/12/2019 1800
-T | 0 | here
-E | 0 |  /from  now  /to  then /from   now   /to   then
-T | 0 | hi
-E | 0 |  /from  here  /to  there
-D | 0 | return book2/12/2019 1800
+ | 0 | hi

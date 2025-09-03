@@ -51,8 +51,8 @@ public class Ui {
         } else {
             System.out.println("\t" +"Here are the tasks in your list:");
             int c = 1;
-            for (Task t : list) {
-                System.out.println("\t" + c++ + ". " + t);
+            for (int i = 0; i < list.size(); i++) {
+                System.out.println("\t" + c++ + ". " + list.get(i));
             }
         }
     }

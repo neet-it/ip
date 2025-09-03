@@ -1,9 +1,7 @@
 import java.util.ArrayList;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeParseException;
 
 public class Cortex {
-    public ArrayList<Task> list;
+    public TaskList list;
     private Storage storage;
     private Ui ui;
     private Parser parser;
@@ -11,7 +9,7 @@ public class Cortex {
 
     public Cortex() {
         this.storage = new Storage("./data/duke.txt");
-        this.list = storage.loadtasks();
+        this.list = new TaskList(storage.loadtasks());
         ui = new Ui();
         parser = new Parser();
 
@@ -34,7 +32,7 @@ public class Cortex {
             ui.printHorizontalLine();
 
             if (command.equalsIgnoreCase("list")) {
-                ui.printList(list);
+                ui.printList(list.getAllTasks());
 
             } else if (command.startsWith("mark")) {
                 markTask(command);
@@ -46,8 +44,7 @@ public class Cortex {
                 deleteTask(command);
 
             } else {
-                Task task = new Task(command);
-                boolean isValidTask = false;
+                Task task = null;
                 int c = 0;
                 if (command.startsWith("todo")) {
                     c++;
@@ -87,12 +84,12 @@ public class Cortex {
         try {
             int  i = parser.parseMarkCommand(command);
 
-            if(i < 0 || i >= list.size()) {
-                ui.printError("Invalid Task! Cannot mark task.");
-            } else {
-                Task t = list.get(i);
+            try {
+                Task t = list.getTask(i);
                 t.markAsDone();
                 ui.printMarked(t);
+            } catch (DukeException e) {
+                ui.printError(e.getMessage());
             }
         } catch (NumberFormatException e) {
             ui.printError("Invalid Task! Cannot mark task.");
@@ -100,7 +97,7 @@ public class Cortex {
             ui.printError("Invalid Task! Cannot mark task.");
         }
 
-        storage.saveTasks(list);
+        storage.saveTasks(list.getAllTasks());
     }
 
     /**
@@ -112,12 +109,12 @@ public class Cortex {
         try {
             int i = parser.parseUnmarkCommand(command);
 
-            if(i < 0 || i >= list.size()) {
-                ui.printError("Invalid Task! Cannot unmark task.");
-            } else {
-                Task t = list.get(i);
+            try {
+                Task t = list.getTask(i);
                 t.unmarkAsDone();
                 ui.printUnmarked(t);
+            } catch (DukeException e) {
+                ui.printError(e.getMessage());
             }
 
         } catch (NumberFormatException e) {
@@ -125,7 +122,7 @@ public class Cortex {
         } catch (IndexOutOfBoundsException e) {
             ui.printError("Invalid Task! Cannot unmark task.");
         }
-        storage.saveTasks(list);
+        storage.saveTasks(list.getAllTasks());
 
     }
 
@@ -138,13 +135,13 @@ public class Cortex {
         try {
             int i = parser.parseDeleteCommand(command);
 
-            if(i < 0 || i >= list.size()) {
-                ui.printError("Invalid Task! Cannot delete task.");
-            } else {
-                Task t = list.get(i);
-                list.remove(i);
-                ui.printDeletedTask(t, list);
-            }
+           try {
+                Task t = list.getTask(i);
+                list.deleteTask(i);
+                ui.printDeletedTask(t, list.getAllTasks());
+           } catch (DukeException e) {
+               ui.printError(e.getMessage());
+           }
 
         } catch (NumberFormatException e) {
             ui.printError("Invalid Task! Cannot unmark task.");
@@ -152,7 +149,7 @@ public class Cortex {
             ui.printError("Invalid Task! Cannot unmark task.");
         }
 
-        storage.saveTasks(list);
+        storage.saveTasks(list.getAllTasks());
     }
 
     /**
@@ -161,9 +158,8 @@ public class Cortex {
      * @param task the Task object needed to be added to list.
      */
     public void addTask(Task task) {
-        list.add(task);
-        ui.printAddedTask(task, list);
-        storage.saveTasks(list);
+        list.addTask(task);
+        ui.printAddedTask(task, list.getAllTasks());
+        storage.saveTasks(list.getAllTasks());
     }
-
 }
