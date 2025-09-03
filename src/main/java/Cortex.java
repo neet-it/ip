@@ -1,5 +1,9 @@
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class Cortex {
     public ArrayList<Task> list;
@@ -69,10 +73,17 @@ public class Cortex {
                         String desc = bySplit[0].trim();
                         String by = bySplit[1].trim();
 
-                        task = new Deadline(desc, by);
+                        try {
+                            LocalDateTime byDateTime = parseDateTime(by);
+                            task = new Deadline(desc, byDateTime);
+                        } catch (DateTimeParseException e) {
+                            task = new Deadline(desc, by);
+                        }
+
                         isValidTask = true;
                     } catch (Exception e) {
-                        System.out.println("\t" + "INVALID DEADLINE TASK");
+                        System.out.println("\t" + "INVALID DEADLINE TASK.");
+                        System.out.println("\t" + "deadline <task> /by ");
                     }
 
                 } else if (command.startsWith("event")) {
@@ -86,7 +97,14 @@ public class Cortex {
                         String from = toSplit[0];
                         String to = toSplit[1];
 
-                        task = new Event(desc, from, to);
+                        try {
+                            LocalDateTime fromDateTime = parseDateTime(from);
+                            LocalDateTime toDateTime = parseDateTime(to);
+                            task = new Event(desc, fromDateTime, toDateTime);
+                        } catch (DateTimeParseException e) {
+                            task = new Event(desc, from, to);
+                        }
+                        
                         isValidTask = true;
                     } catch (Exception e) {
                         System.out.println("\t" + "INVALID EVENT TASK");
@@ -100,7 +118,6 @@ public class Cortex {
                 }
 
             }
-
 
             System.out.println("\t" + line);
             command = sc.nextLine().trim();
@@ -223,5 +240,36 @@ public class Cortex {
         System.out.println("\t" + "Now you have " + list.size() + " tasks in the list.");
 
         storage.saveTasks(list);
+    }
+
+    /**
+     * Returns a string as LocalDateTime object.
+     *
+     * @param timeString to store the time as a string.
+     * @throws DateTimeParseException if the timeString is invalid time format.
+     */
+
+    public LocalDateTime parseDateTime(String timeString) throws DateTimeParseException {
+        timeString = timeString.trim();
+
+        if (timeString.contains(" ")) {
+            String[] parts = timeString.split(" ");
+            String dd = parts[0];
+            String tt = parts[1];
+
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("d/M/yyyy");
+            LocalDate date = LocalDate.parse(dd, dateFormatter);
+
+            if (parts[1].length() == 4) {
+                int hour = Integer.parseInt(parts[1].substring(0, 2));
+                int minute = Integer.parseInt(parts[1].substring(2));
+                return LocalDateTime.of(date, java.time.LocalTime.of(hour, minute));
+            } else {
+                throw new DateTimeParseException("Invalid time!", timeString, 0);
+            }
+        } else {
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("d/M/yyyy");
+            return LocalDate.parse(timeString, dateFormatter).atStartOfDay();
+        }
     }
 }
