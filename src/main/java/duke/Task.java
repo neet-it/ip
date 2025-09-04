@@ -1,4 +1,9 @@
 package duke;
+
+/**
+ * Represents a general task with a description and completion status.
+ * This is the superclass for specific task types such as Todo, Deadline, and Event.
+ */
 public class Task {
     protected String description;
     protected boolean isDone;

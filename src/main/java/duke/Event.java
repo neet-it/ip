@@ -1,14 +1,17 @@
 package duke;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-
+/**
+ * Represents an Event task with a start and end time.
+ */
 public class Event extends Task {
 
     protected String from;
     protected String to;
     protected LocalDateTime fromDateTime;
     protected LocalDateTime toDateTime;
-    public boolean isDateTime;
+    private boolean isDateTime;
 
     public Event(String description, String from, String to) {
         super(description);
@@ -17,7 +20,7 @@ public class Event extends Task {
         isDateTime = false;
     }
 
-    public Event(String description,LocalDateTime fromDateTime , LocalDateTime toDateTime) {
+    public Event(String description, LocalDateTime fromDateTime , LocalDateTime toDateTime) {
         super(description);
         this.fromDateTime = fromDateTime;
         this.toDateTime = toDateTime;
@@ -26,7 +29,7 @@ public class Event extends Task {
 
     @Override
     public String toString() {
-        if(isDateTime) {
+        if (isDateTime) {
             return "[E]" + super.toString() + " (from: " + formatDateTimeWithOrdinal(this.fromDateTime)
                     + " to: " + formatDateTimeWithOrdinal(this.toDateTime) + ")";
         } else {
@@ -36,9 +39,10 @@ public class Event extends Task {
 
     @Override
     public String toFileString() {
-        if(isDateTime) {
+        if (isDateTime) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
-            return "E | " +  super.toFileString() + " | " +  fromDateTime.format(formatter) + " | " + toDateTime.format(formatter);
+            return "E | " + super.toFileString() + " | " + fromDateTime.format(formatter)
+                    + " | " + toDateTime.format(formatter);
 
         } else {
             return "E | " + super.toFileString() + " | " + this.from + " | " + this.to;
@@ -46,10 +50,10 @@ public class Event extends Task {
     }
 
     /**
-     * Formats d/M/yyyy hh -> dth of M, yyyy hh.
+     * Converts a LocalDateTime object into a string using the pattern "d/M/yyyy HHmm".
      *
-     * @param dateTime is the LocalDateTime object to be returned in String format.
-     * @return date as dth of M, yyyy hh.
+     * @param dateTime the LocalDateTime to format
+     * @return a string representing the formatted date and time
      */
     public String formatDateTimeWithOrdinal(LocalDateTime dateTime) {
         int day = dateTime.getDayOfMonth();
@@ -63,7 +67,7 @@ public class Event extends Task {
      * Returns the correct suffix to a particular date.
      *
      * @param day Day of the month.
-     * @return date as dth of M, yyyy hh.
+     * @return date as a string: dth of M, yyyy hh.
      */
     public String getOrdinal(int day) {
         if (day >= 11 && day <= 13) {
