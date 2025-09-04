@@ -1,4 +1,5 @@
 package duke;
+import java.util.ArrayList;
 
 /**
  * Represents a chatbot that stores tasks.
@@ -46,6 +47,9 @@ public class Cortex {
 
             } else if (command.startsWith("delete")) {
                 deleteTask(command);
+
+            } else if (command.startsWith("find")) {
+                findTask(command);
 
             } else {
                 Task task = null;
@@ -164,5 +168,32 @@ public class Cortex {
         list.addTask(task);
         ui.printAddedTask(task, list.getAllTasks());
         storage.saveTasks(list.getAllTasks());
+    }
+
+    /**
+     * Finds tasks that match the find command.
+     *
+     */
+    public void findTask(String command) {
+        try {
+            String key = parser.parseFindCommand(command);
+
+            if (key.isEmpty()) {
+                ui.printError("Invalid Search! Please specify item.");
+                return;
+            }
+
+            ArrayList<Task> findList = new ArrayList<>();
+
+            for (Task task : list.getAllTasks()) {
+                if (task.description.toLowerCase().contains(key.toLowerCase())) {
+                    findList.add(task);
+                }
+            }
+            ui.printFoundList(findList, key);
+
+        } catch (StringIndexOutOfBoundsException e) {
+            ui.printError("Invalid Task! No tasks to find.");
+        }
     }
 }
