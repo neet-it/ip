@@ -27,6 +27,10 @@ public class TaskList {
         return list.get(index);
     }
 
+    public int getSize() {
+        return this.list.size();
+    }
+
     public ArrayList<Task> getAllTasks() {
         return new ArrayList<>(list);
     }
