@@ -16,7 +16,7 @@ public class Deadline extends Task {
 
     public Deadline(String description, String by) {
         super(description);
-        this.by = by;
+        this.by = by.trim();
         this.isDateTime = false;
     }
 
@@ -32,10 +32,10 @@ public class Deadline extends Task {
     public String toFileString() {
         if(isDateTime) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
-            return "D" + super.toFileString() + this.byDateTime.format(formatter);
+            return "D | " + super.toFileString() + " | " +  this.byDateTime.format(formatter);
 
         } else {
-            return "D" + super.toFileString() + " /by " + this.by;
+            return "D | " + super.toFileString() + " | " + this.by;
         }
     }
 

@@ -1,1 +1,5 @@
- | 0 | hi
+T | 0 | read a book
+D | 0 | meet | then
+E | 0 | bye | now | then
+D | 0 | here | 25/1/2050 1800
+E | 0 | meeting | 25/1/2025 1200 | 25/1/2025 1200

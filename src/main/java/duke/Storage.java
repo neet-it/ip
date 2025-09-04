@@ -38,7 +38,7 @@ public class Storage {
                             list.add(task);
                         }
                     } catch(Exception e) {
-                        System.out.println("\t" + "Oh no! Could not load tasks from your previous list.");
+                        // System.out.println("\t" + "Oh no! Could not load tasks from your previous list.");
                     }
                 }
             }
@@ -92,39 +92,30 @@ public class Storage {
             task = new Todo(description);
             break;
         case "D":
-            try {
-                String[] bySplit = description.split("/by");
-                String by = bySplit[1].trim();
+            String by = parts[3].trim();
 
-                try {
-                    LocalDateTime byDateTime = parseDateTime(by);
-                    task = new Deadline(description, byDateTime);
-                } catch (DateTimeParseException e) {
-                    task = new Deadline(description, by);
-                }
-            } catch (Exception e) {
-                System.out.println("\t" + "INVALID DEADLINE TASK");
+            try {
+                LocalDateTime byDateTime = parseDateTime(by);
+                task = new Deadline(description, byDateTime);
+            } catch (DateTimeParseException e) {
+                task = new Deadline(description, by);
             }
+
 
             break;
         case "E":
+
+            String from = parts[3].trim();
+            String to = parts[4].trim();
+
             try {
-                String[] fromSplit = description.split("/from");
-
-                String[] toSplit = fromSplit[1].split("/to");
-                String from = toSplit[0];
-                String to = toSplit[1];
-
-                try {
-                    LocalDateTime fromDateTime = parseDateTime(from);
-                    LocalDateTime toDateTime = parseDateTime(to);
-                    task = new Event(description, fromDateTime, toDateTime);
-                } catch (DateTimeParseException e) {
-                    task = new Event(description, from, to);
-                }
-            } catch (Exception e) {
-                System.out.println("\t" + "INVALID EVENT TASK");
+                LocalDateTime fromDateTime = parseDateTime(from);
+                LocalDateTime toDateTime = parseDateTime(to);
+                task = new Event(description, fromDateTime, toDateTime);
+            } catch (DateTimeParseException e) {
+                task = new Event(description, from, to);
             }
+
             break;
         }
 
@@ -135,7 +126,7 @@ public class Storage {
         return task;
 
     }
-    
+
     /**
      * Returns a string as LocalDateTime object.
      *
@@ -147,12 +138,13 @@ public class Storage {
 
         if (timeString.contains(" ")) {
             String[] parts = timeString.split(" ");
-            String dd = parts[0];
+            String dd = parts[0].trim();
+            String tt = parts[1].trim();
 
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("d/M/yyyy");
             LocalDate date = LocalDate.parse(dd, dateFormatter);
 
-            if (parts[1].length() == 4) {
+            if (tt.length() == 4) {
                 int hour = Integer.parseInt(parts[1].substring(0, 2));
                 int minute = Integer.parseInt(parts[1].substring(2));
                 return LocalDateTime.of(date, java.time.LocalTime.of(hour, minute));

@@ -29,7 +29,7 @@ public class Task {
     }
 
     public String toFileString() {
-        return " | " + (isDone ? "1" : "0") + " | " + this.description;
+        return (isDone ? "1" : "0") + " | " + this.description;
     }
 
 }

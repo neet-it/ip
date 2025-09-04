@@ -12,8 +12,8 @@ public class Event extends Task {
 
     public Event(String description, String from, String to) {
         super(description);
-        this.from = from;
-        this.to = to;
+        this.from = from.trim();
+        this.to = to.trim();
         isDateTime = false;
     }
 
@@ -36,10 +36,10 @@ public class Event extends Task {
     public String toFileString() {
         if(isDateTime) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
-            return "E" +  super.toFileString() + fromDateTime.format(formatter) + " | " + toDateTime.format(formatter);
+            return "E | " +  super.toFileString() + " | " +  fromDateTime.format(formatter) + " | " + toDateTime.format(formatter);
 
         } else {
-            return "E" + super.toFileString() + " /from " + this.from + " /to " + this.to;
+            return "E | " + super.toFileString() + " | " + this.from + " | " + this.to;
         }
     }
 
