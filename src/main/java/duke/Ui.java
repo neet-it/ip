@@ -58,6 +58,18 @@ public class Ui {
         }
     }
 
+    public void printFoundList(ArrayList<Task> list, String key) {
+        if (list.isEmpty()) {
+            System.out.println("\t" + "No matching tasks found for: " + key);
+        } else {
+            System.out.println("\t" + "Here are the matching tasks in your list:");
+            int c = 1;
+            for (Task task : list) {
+                System.out.println("\t" + c++ + ". " + task);
+            }
+        }
+    }
+
     public void printMarked(Task t) {
         System.out.println("\t" + "Nice! I've marked this task as done:");
         System.out.println("\t" + t);

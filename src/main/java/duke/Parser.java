@@ -18,6 +18,10 @@ public class Parser {
         return Integer.parseInt(command.substring(7).trim()) - 1;
     }
 
+    public String parseFindCommand(String command) {
+        return command.substring(5).trim();
+    }
+
     public Task parseTodoCommand(String command) {
         Task task = null ;
         try {
