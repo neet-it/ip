@@ -14,6 +14,7 @@ public class Cortex {
         parser = new Parser();
 
     }
+
     public static void main(String[] args) {
         Cortex ob = new Cortex();
         ob.run();
@@ -129,7 +130,7 @@ public class Cortex {
     /**
      * Deletes a task as done if the task number exists.
      *
-     * @param command contains the information of the task number and updates task fileli.
+     * @param command contains the information of the task number and updates task file.
      */
     public void deleteTask(String command) {
         try {

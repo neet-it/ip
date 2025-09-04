@@ -4,20 +4,45 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-public class Parser {
+public class Parser
 
+{
+    /**
+     * Parses the task number to mark as done.
+     *
+     * @param command Includes task number in a string.
+     * @return task number.
+     */
     public int parseMarkCommand(String command) {
         return Integer.parseInt(command.substring(5).trim()) - 1;
     }
 
+    /**
+     * Parses the task number to unmark.
+     *
+     * @param command Includes task number in a string.
+     * @return task number.
+     */
     public int parseUnmarkCommand(String command) {
         return Integer.parseInt(command.substring(7).trim()) - 1;
     }
 
+    /**
+     * Parses the task number to delete.
+     *
+     * @param command Includes task number in a string.
+     * @return task number.
+     */
     public int parseDeleteCommand(String command) {
         return Integer.parseInt(command.substring(7).trim()) - 1;
     }
 
+    /**
+     * Parses the commands description.
+     *
+     * @param command task string to perform.
+     * @return Task object.
+     */
     public Task parseTodoCommand(String command) {
         Task task = null ;
         try {
@@ -29,6 +54,12 @@ public class Parser {
         return task;
     }
 
+    /**
+     * Parses the commands description and time.
+     *
+     * @param command task string to perform.
+     * @return Task object.
+     */
     public Task parseDeadlineCommand(String command) {
         Task task = null;
         try {
@@ -60,6 +91,12 @@ public class Parser {
         return task;
     }
 
+    /**
+     * Parses the commands description and time.
+     *
+     * @param command task string to perform.
+     * @return Task object.
+     */
     public Task parseEventCommand(String command) {
         Task task = null;
         try {
