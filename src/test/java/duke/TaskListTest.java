@@ -60,7 +60,6 @@ public class TaskListTest {
         ArrayList<Task> allTasks = taskList.getAllTasks();
         assertEquals(3, allTasks.size());
 
-        
         allTasks.remove(0);
         assertEquals(2, allTasks.size());
         assertEquals(3, taskList.getAllTasks().size());
