@@ -1,10 +1,15 @@
 package duke;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+/**
+ * Represents a UI for the chatbot.
+ */
+
 public class Ui {
 
     public final String line = "__________________________________________________";
-    public Scanner sc;
+    private Scanner sc;
 
     public Ui() {
         sc = new Scanner(System.in);
@@ -13,6 +18,7 @@ public class Ui {
     public String readCommand() {
         return sc.nextLine().trim();
     }
+
     public void printHello() {
         System.out.println("\t" + line);
         System.out.println("\t" + "Hello! I'm Cortex");
@@ -21,9 +27,9 @@ public class Ui {
     }
 
     public void printBye() {
-        System.out.println("\t" +line);
-        System.out.println("\t" +"Bye. Hope to see you again soon!");
-        System.out.println("\t" +line);
+        System.out.println("\t" + line);
+        System.out.println("\t" + "Bye. Hope to see you again soon!");
+        System.out.println("\t" + line);
     }
 
     public void printHorizontalLine() {
@@ -35,9 +41,9 @@ public class Ui {
     }
 
     public void printDeletedTask(Task t, ArrayList<Task> list) {
-        System.out.println("\t" +"Noted. I've removed this task:");
+        System.out.println("\t" + "Noted. I've removed this task:");
         System.out.println("\t" + t);
-        System.out.println("\t" +  "Now you have " + list.size() + " tasks in the list.");
+        System.out.println("\t" + "Now you have " + list.size() + " tasks in the list.");
     }
 
     public void printAddedTask(Task t, ArrayList<Task> list) {
@@ -48,9 +54,9 @@ public class Ui {
 
     public void printList(ArrayList<Task> list) {
         if (list.isEmpty()) {
-            System.out.println("\t" +"There are no tasks in your list.");
+            System.out.println("\t" + "There are no tasks in your list.");
         } else {
-            System.out.println("\t" +"Here are the tasks in your list:");
+            System.out.println("\t" + "Here are the tasks in your list:");
             int c = 1;
             for (int i = 0; i < list.size(); i++) {
                 System.out.println("\t" + c++ + ". " + list.get(i));
@@ -64,7 +70,7 @@ public class Ui {
     }
 
     public void printUnmarked(Task t) {
-        System.out.println("\t" +"OK, I've marked this task as not done yet:");
+        System.out.println("\t" + "OK, I've marked this task as not done yet:");
         System.out.println("\t" + t);
     }
 

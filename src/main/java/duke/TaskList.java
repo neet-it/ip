@@ -1,6 +1,10 @@
 package duke;
 import java.util.ArrayList;
 
+/**
+ * Represents a list of tasks and provides methods to manage them.
+ * Encapsulates operations such as adding, deleting, marking, and retrieving tasks.
+ */
 public class TaskList {
 
     private ArrayList<Task> list;

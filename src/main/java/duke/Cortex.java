@@ -1,7 +1,10 @@
 package duke;
 
+/**
+ * Represents a chatbot that stores tasks.
+ */
 public class Cortex {
-    public TaskList list;
+    private TaskList list;
     private Storage storage;
     private Ui ui;
     private Parser parser;
@@ -40,7 +43,7 @@ public class Cortex {
             } else if (command.startsWith("unmark")) {
                 unmarkTask(command);
 
-            }else if(command.startsWith("delete")) {
+            } else if (command.startsWith("delete")) {
                 deleteTask(command);
 
             } else {
@@ -59,10 +62,10 @@ public class Cortex {
                     task = parser.parseEventCommand(command);
                 }
 
-                if(task != null) {
+                if (task != null) {
                     addTask(task);
                 }
-                if (c == 0){
+                if (c == 0) {
                     ui.printError("INVALID TASK TYPE");
                 }
 
@@ -80,9 +83,9 @@ public class Cortex {
      *
      * @param command contains the information of the task number.
      */
-    public void markTask(String command){
+    public void markTask(String command) {
         try {
-            int  i = parser.parseMarkCommand(command);
+            int i = parser.parseMarkCommand(command);
 
             try {
                 Task t = list.getTask(i);
@@ -129,20 +132,19 @@ public class Cortex {
     /**
      * Deletes a task as done if the task number exists.
      *
-     * @param command contains the information of the task number and updates task fileli.
+     * @param command contains the information of the task number and updates task file.
      */
     public void deleteTask(String command) {
         try {
             int i = parser.parseDeleteCommand(command);
 
-           try {
+            try {
                 Task t = list.getTask(i);
                 list.deleteTask(i);
                 ui.printDeletedTask(t, list.getAllTasks());
-           } catch (DukeException e) {
-               ui.printError(e.getMessage());
-           }
-
+            } catch (DukeException e) {
+                ui.printError(e.getMessage());
+            }
         } catch (NumberFormatException e) {
             ui.printError("Invalid Task! Cannot unmark task.");
         } catch (IndexOutOfBoundsException e) {

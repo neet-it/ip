@@ -11,12 +11,15 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Represents a storage manager that handles saving and loading tasks
+ * to and from a file. Supports Todo, Deadline, and Event tasks.
+ */
 public class Storage {
 
-    public String filepath;
+    private String filepath;
 
-    public Storage(String filepath){
+    public Storage(String filepath) {
         this.filepath = filepath;
     }
 
@@ -31,13 +34,13 @@ public class Storage {
             if (Files.exists(path)) {
                 List<String> file = Files.readAllLines(path);
 
-                for(String line : file){
+                for (String line : file) {
                     try {
                         Task task = parseTask(line);
-                        if(task != null) {
+                        if (task != null) {
                             list.add(task);
                         }
-                    } catch(Exception e) {
+                    } catch (Exception e) {
                         // System.out.println("\t" + "Oh no! Could not load tasks from your previous list.");
                     }
                 }
@@ -57,17 +60,17 @@ public class Storage {
     public void saveTasks(ArrayList<Task> list) {
         try {
             File dir = new File("./data");
-            if(!dir.exists()) {
+            if (!dir.exists()) {
                 dir.mkdir();
             }
 
             FileWriter writer = new FileWriter(filepath);
 
-            for(Task task : list) {
+            for (Task task : list) {
                 writer.write(task.toFileString() + "\n");
             }
             writer.close();
-        } catch(IOException e) {
+        } catch (IOException e) {
             System.out.println("\t" + "Tasks could not be saved to file");
         }
     }
@@ -79,7 +82,9 @@ public class Storage {
      */
     public Task parseTask(String line) {
         String[] parts = line.split(" \\| ");
-        if (parts.length < 3) return null;
+        if (parts.length < 3) {
+            return null;
+        }
 
         String taskType = parts[0];
         boolean isDone = parts[1].equals("1");
@@ -117,6 +122,9 @@ public class Storage {
             }
 
             break;
+
+        default:
+            task = null;
         }
 
         if (task != null && isDone) {

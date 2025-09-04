@@ -1,12 +1,16 @@
 package duke;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Represents a Deadline task with a due date and time.
+ */
 public class Deadline extends Task {
 
     protected LocalDateTime byDateTime;
     protected String by;
-    public boolean isDateTime;
+    private boolean isDateTime;
 
     public Deadline(String description, LocalDateTime byDateTime) {
         super(description);
@@ -22,23 +26,30 @@ public class Deadline extends Task {
 
     @Override
     public String toString() {
-        if(isDateTime) {
+        if (isDateTime) {
             return "[D]" + super.toString() + " (by: " + formatDateTimeWithOrdinal(this.byDateTime) + ")";
         } else {
             return "[D]" + super.toString() + " (by: " + this.by + ")";
         }
     }
 
+    @Override
     public String toFileString() {
-        if(isDateTime) {
+        if (isDateTime) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
-            return "D | " + super.toFileString() + " | " +  this.byDateTime.format(formatter);
+            return "D | " + super.toFileString() + " | " + this.byDateTime.format(formatter);
 
         } else {
             return "D | " + super.toFileString() + " | " + this.by;
         }
     }
 
+    /**
+     * Converts a LocalDateTime object into a string using the pattern "d/M/yyyy HHmm".
+     *
+     * @param dateTime the LocalDateTime to format
+     * @return a string representing the formatted date and time
+     */
     public String formatDateTimeWithOrdinal(LocalDateTime dateTime) {
         int day = dateTime.getDayOfMonth();
         String ordinal = getOrdinal(day);

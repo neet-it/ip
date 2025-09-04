@@ -4,6 +4,11 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
+/**
+ * Represents a parser that converts user input commands
+ * into Task objects or indices for task manipulation.
+ */
+
 public class Parser {
 
     public int parseMarkCommand(String command) {
@@ -18,17 +23,30 @@ public class Parser {
         return Integer.parseInt(command.substring(7).trim()) - 1;
     }
 
+    /**
+     * Parses a command string and creates a Todo task.
+     *
+     * @param command the full user command.
+     * @return a Todo task object with the description.
+     */
     public Task parseTodoCommand(String command) {
-        Task task = null ;
+        Task task = null;
         try {
             String s = command.substring(5).trim();
             task = new Todo(s);
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.println("\t" + "INVALID TODO TASK");
         }
         return task;
     }
 
+
+    /**
+     * Parses a command string and creates a Deadline task.
+     *
+     * @param command the full user command.
+     * @return a Deadline task object with the description and time
+     */
     public Task parseDeadlineCommand(String command) {
         Task task = null;
         try {
@@ -60,6 +78,13 @@ public class Parser {
         return task;
     }
 
+
+    /**
+     * Parses a command string and creates an Event task.
+     *
+     * @param command the full user command.
+     * @return an Event task object with the description and time
+     */
     public Task parseEventCommand(String command) {
         Task task = null;
         try {
