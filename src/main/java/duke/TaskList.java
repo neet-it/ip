@@ -17,6 +17,13 @@ public class TaskList {
         list.add(task);
     }
 
+    /**
+     * Deletes the task at the specified index from the task list.
+     *
+     * @param index the index of the task to delete.
+     * @return the Task that was removed from the list.
+     * @throws DukeException if the index is invalid.
+     */
     public Task deleteTask(int index) throws DukeException {
         if (index < 0 || index >= list.size()) {
             throw new DukeException("Invalid task index");
@@ -24,6 +31,13 @@ public class TaskList {
         return list.remove(index);
     }
 
+    /**
+     * Returns the task at the specified index from the task list.
+     *
+     * @param index the index of the task to return.
+     * @return the Task that was removed from the list.
+     * @throws DukeException if the index is invalid.
+     */
     public Task getTask(int index) throws DukeException {
         if (index < 0 || index >= list.size()) {
             throw new DukeException("Invalid Task!");

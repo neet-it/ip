@@ -49,7 +49,6 @@ public class Deadline extends Task {
      *
      * @param dateTime the LocalDateTime to format
      * @return a string representing the formatted date and time
-
      */
     public String formatDateTimeWithOrdinal(LocalDateTime dateTime) {
         int day = dateTime.getDayOfMonth();
