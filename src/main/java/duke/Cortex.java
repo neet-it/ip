@@ -21,65 +21,58 @@ public class Cortex {
 
     public static void main(String[] args) {
         Cortex ob = new Cortex();
-        ob.run();
     }
 
     /**
      * Starts the chatbot.
      */
-    public void run() {
+    public String getResponse(String command) {
+        StringBuilder response = new StringBuilder();
 
-        ui.printHello();
-        String command = ui.readCommand();
+        if (command.equalsIgnoreCase("bye")) {
+            response.append(ui.printBye());
 
+        } else if (command.equalsIgnoreCase("list")) {
+            response.append(ui.printList(list.getAllTasks()));
 
-        while (!command.equalsIgnoreCase("bye")) {
-            ui.printHorizontalLine();
+        } else if (command.startsWith("mark")) {
+            response.append(markTask(command));
 
-            if (command.equalsIgnoreCase("list")) {
-                ui.printList(list.getAllTasks());
+        } else if (command.startsWith("unmark")) {
+            response.append(unmarkTask(command));
 
-            } else if (command.startsWith("mark")) {
-                markTask(command);
+        } else if (command.startsWith("delete")) {
+            response.append(deleteTask(command));
 
-            } else if (command.startsWith("unmark")) {
-                unmarkTask(command);
+        } else if (command.startsWith("find")) {
+            response.append(findTask(command));
 
-            } else if (command.startsWith("delete")) {
-                deleteTask(command);
+        } else {
+            Task task = null;
+            int c = 0;
+            if (command.startsWith("todo")) {
+                c++;
+                task = parser.parseTodoCommand(command);
 
-            } else if (command.startsWith("find")) {
-                findTask(command);
+            } else if (command.startsWith("deadline")) {
+                c++;
+                task = parser.parseDeadlineCommand(command);
 
-            } else {
-                Task task = null;
-                int c = 0;
-                if (command.startsWith("todo")) {
-                    c++;
-                    task = parser.parseTodoCommand(command);
-
-                } else if (command.startsWith("deadline")) {
-                    c++;
-                    task = parser.parseDeadlineCommand(command);
-
-                } else if (command.startsWith("event")) {
-                    c++;
-                    task = parser.parseEventCommand(command);
-                }
-
-                if (task != null) {
-                    addTask(task);
-                }
-                if (c == 0) {
-                    ui.printError("INVALID TASK TYPE");
-                }
-
+            } else if (command.startsWith("event")) {
+                c++;
+                task = parser.parseEventCommand(command);
             }
 
-            ui.printHorizontalLine();
-            command = ui.readCommand();
+            if (task != null) {
+                response.append(addTask(task));
+            }
+            if (c == 0) {
+                response.append(ui.printError("INVALID TASK TYPE"));
+            }
+
         }
-        ui.printBye();
+        response.append(ui.printHorizontalLine());
+        return response.toString();
     }
 
 
@@ -88,24 +81,23 @@ public class Cortex {
      *
      * @param command contains the information of the task number.
      */
-    public void markTask(String command) {
+    public StringBuilder markTask(String command) {
         try {
             int i = parser.parseMarkCommand(command);
 
             try {
                 Task t = list.getTask(i);
                 t.markAsDone();
-                ui.printMarked(t);
+                storage.saveTasks(list.getAllTasks());
+                return ui.printMarked(t);
             } catch (DukeException e) {
-                ui.printError(e.getMessage());
+                return ui.printError(e.getMessage());
             }
         } catch (NumberFormatException e) {
-            ui.printError("Invalid Task! Cannot mark task.");
+            return ui.printError("Invalid Task! Cannot mark task.");
         } catch (IndexOutOfBoundsException e) {
-            ui.printError("Invalid Task! Cannot mark task.");
+            return ui.printError("Invalid Task! Cannot mark task.");
         }
-
-        storage.saveTasks(list.getAllTasks());
     }
 
     /**
@@ -113,25 +105,24 @@ public class Cortex {
      *
      * @param command contains the information of the task number.
      */
-    public void unmarkTask(String command) {
+    public StringBuilder unmarkTask(String command) {
         try {
             int i = parser.parseUnmarkCommand(command);
 
             try {
                 Task t = list.getTask(i);
                 t.unmarkAsDone();
-                ui.printUnmarked(t);
+                storage.saveTasks(list.getAllTasks());
+                return ui.printUnmarked(t);
             } catch (DukeException e) {
-                ui.printError(e.getMessage());
+                return ui.printError(e.getMessage());
             }
 
         } catch (NumberFormatException e) {
-            ui.printError("Invalid Task! Cannot unmark task.");
+            return ui.printError("Invalid Task! Cannot unmark task.");
         } catch (IndexOutOfBoundsException e) {
-            ui.printError("Invalid Task! Cannot unmark task.");
+            return ui.printError("Invalid Task! Cannot unmark task.");
         }
-        storage.saveTasks(list.getAllTasks());
-
     }
 
     /**
@@ -139,24 +130,23 @@ public class Cortex {
      *
      * @param command contains the information of the task number and updates task file.
      */
-    public void deleteTask(String command) {
+    public StringBuilder deleteTask(String command) {
         try {
             int i = parser.parseDeleteCommand(command);
 
             try {
                 Task t = list.getTask(i);
                 list.deleteTask(i);
-                ui.printDeletedTask(t, list.getAllTasks());
+                storage.saveTasks(list.getAllTasks());
+                return ui.printDeletedTask(t, list.getAllTasks());
             } catch (DukeException e) {
-                ui.printError(e.getMessage());
+                return ui.printError(e.getMessage());
             }
         } catch (NumberFormatException e) {
-            ui.printError("Invalid Task! Cannot unmark task.");
+            return ui.printError("Invalid Task! Cannot unmark task.");
         } catch (IndexOutOfBoundsException e) {
-            ui.printError("Invalid Task! Cannot unmark task.");
+            return ui.printError("Invalid Task! Cannot unmark task.");
         }
-
-        storage.saveTasks(list.getAllTasks());
     }
 
     /**
@@ -164,23 +154,22 @@ public class Cortex {
      *
      * @param task the Task object needed to be added to list.
      */
-    public void addTask(Task task) {
+    public StringBuilder addTask(Task task) {
         list.addTask(task);
-        ui.printAddedTask(task, list.getAllTasks());
         storage.saveTasks(list.getAllTasks());
+        return ui.printAddedTask(task, list.getAllTasks());
     }
 
     /**
      * Finds tasks that match the find command.
      *
      */
-    public void findTask(String command) {
+    public StringBuilder findTask(String command) {
         try {
             String key = parser.parseFindCommand(command);
 
             if (key.isEmpty()) {
-                ui.printError("Invalid Search! Please specify item.");
-                return;
+                return ui.printError("Invalid Search! Please specify item.");
             }
 
             ArrayList<Task> findList = new ArrayList<>();
@@ -190,10 +179,14 @@ public class Cortex {
                     findList.add(task);
                 }
             }
-            ui.printFoundList(findList, key);
+            return ui.printFoundList(findList, key);
 
         } catch (StringIndexOutOfBoundsException e) {
-            ui.printError("Invalid Task! No tasks to find.");
+            return ui.printError("Invalid Task! No tasks to find.");
         }
+    }
+
+    public String getHello() {
+        return ui.printHello();
     }
 }
