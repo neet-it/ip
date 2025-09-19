@@ -30,20 +30,16 @@ public class Storage {
     public ArrayList<Task> loadtasks() {
         ArrayList<Task> list = new ArrayList<>();
         Path path = Paths.get(filepath);
+        if (!Files.exists(path)) {
+            return null;
+        }
 
         try {
-            if (Files.exists(path)) {
-                List<String> file = Files.readAllLines(path);
-
-                for (String line : file) {
-                    try {
-                        Task task = parseTask(line);
-                        if (task != null) {
-                            list.add(task);
-                        }
-                    } catch (Exception e) {
-                        // System.out.println("\t" + "Oh no! Could not load tasks from your previous list.");
-                    }
+            List<String> file = Files.readAllLines(path);
+            for (String line : file) {
+                Task task = parseTask(line);
+                if (task != null) {
+                    list.add(task);
                 }
             }
         } catch (IOException e) {
@@ -86,12 +82,10 @@ public class Storage {
         if (parts.length < 3) {
             return null;
         }
-
         String taskType = parts[0];
         boolean isDone = parts[1].equals("1");
         String description = parts[2];
-
-        Task task = null;
+        Task task;
 
         switch (taskType) {
         case "T":
@@ -99,41 +93,52 @@ public class Storage {
             break;
         case "D":
             String by = parts[3].trim();
-
-            try {
-                LocalDateTime byDateTime = parseDateTime(by);
-                task = new Deadline(description, byDateTime);
-            } catch (DateTimeParseException e) {
-                task = new Deadline(description, by);
-            }
-
-
+            task = parseDeadlineStorageTask(description, by);
             break;
         case "E":
-
             String from = parts[3].trim();
             String to = parts[4].trim();
-
-            try {
-                LocalDateTime fromDateTime = parseDateTime(from);
-                LocalDateTime toDateTime = parseDateTime(to);
-                task = new Event(description, fromDateTime, toDateTime);
-            } catch (DateTimeParseException e) {
-                task = new Event(description, from, to);
-            }
-
+            task = parseEventStorageTask(description, from, to);
             break;
-
         default:
             task = null;
         }
-
         if (task != null && isDone) {
             task.markAsDone();
         }
-
         return task;
+    }
 
+    /**
+     * Returns deadline task object.
+     *
+     * @param description stores the task description string to be converted into objects.
+     * @param by stores the task by time as a string to be converted into objects.
+     */
+    public Task parseDeadlineStorageTask(String description, String by) {
+        try {
+            LocalDateTime byDateTime = parseDateTime(by);
+            return new Deadline(description, byDateTime);
+        } catch (DateTimeParseException e) {
+            return new Deadline(description, by);
+        }
+    }
+
+    /**
+     * Returns deadline task object.
+     *
+     * @param description stores the task description string to be converted into objects.
+     * @param from stores the task from time as a string to be converted into objects.
+     * @param to stores the task to time as a string to be converted into objects.
+     */
+    public Task parseEventStorageTask(String description, String from, String to) {
+        try {
+            LocalDateTime fromDateTime = parseDateTime(from);
+            LocalDateTime toDateTime = parseDateTime(to);
+            return new Event(description, fromDateTime, toDateTime);
+        } catch (DateTimeParseException e) {
+            return  new Event(description, from, to);
+        }
     }
 
     /**
