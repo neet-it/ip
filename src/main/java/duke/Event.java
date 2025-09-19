@@ -68,17 +68,21 @@ public class Event extends Task {
      * Returns the correct suffix to a particular date.
      *
      * @param day Day of the month.
-     * @return date as a string: dth of M, yyyy hh.
+     * @return the correct suffix to a particular date as a string.
      */
     public String getOrdinal(int day) {
         if (day >= 11 && day <= 13) {
             return "th";
         }
         switch (day % 10) {
-        case 1: return "st";
-        case 2: return "nd";
-        case 3: return "rd";
-        default: return "th";
+        case 1:
+            return "st";
+        case 2:
+            return "nd";
+        case 3:
+            return "rd";
+        default:
+            return "th";
         }
     }
 }
