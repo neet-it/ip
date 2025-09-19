@@ -1,5 +1,7 @@
 package duke;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * Represents a chatbot that stores tasks.
@@ -82,22 +84,24 @@ public class Cortex {
      * @param command contains the information of the task number.
      */
     public StringBuilder markTask(String command) {
+        StringBuilder s = new StringBuilder();
         try {
-            int i = parser.parseMarkCommand(command);
+            List<Integer> indices = parser.parseMultipleIndices(parser.parseMarkCommand(command));
 
-            try {
-                Task t = list.getTask(i);
-                t.markAsDone();
-                storage.saveTasks(list.getAllTasks());
-                return ui.printMarked(t);
-            } catch (DukeException e) {
-                return ui.printError(e.getMessage());
+            for (int i : indices) {
+                try {
+                    Task t = list.getTask(i);
+                    t.markAsDone();
+                    s.append(ui.printMarked(t));
+                } catch (DukeException | IndexOutOfBoundsException e) {
+                    s.append(ui.printError("Invalid Task! Cannot mark task."));
+                }
             }
+            storage.saveTasks(list.getAllTasks());
         } catch (NumberFormatException e) {
             return ui.printError("Invalid Task! Cannot mark task.");
-        } catch (IndexOutOfBoundsException e) {
-            return ui.printError("Invalid Task! Cannot mark task.");
         }
+        return s;
     }
 
     /**
@@ -106,23 +110,24 @@ public class Cortex {
      * @param command contains the information of the task number.
      */
     public StringBuilder unmarkTask(String command) {
+        StringBuilder s = new StringBuilder();
         try {
-            int i = parser.parseUnmarkCommand(command);
+            List<Integer> indices = parser.parseMultipleIndices(parser.parseUnmarkCommand(command));
 
-            try {
-                Task t = list.getTask(i);
-                t.unmarkAsDone();
-                storage.saveTasks(list.getAllTasks());
-                return ui.printUnmarked(t);
-            } catch (DukeException e) {
-                return ui.printError(e.getMessage());
+            for (int i : indices) {
+                try {
+                    Task t = list.getTask(i);
+                    t.unmarkAsDone();
+                    s.append(ui.printUnmarked(t));
+                } catch (DukeException | IndexOutOfBoundsException e) {
+                    s.append(ui.printError("Invalid Task! Cannot unmark task."));
+                }
             }
-
+            storage.saveTasks(list.getAllTasks());
         } catch (NumberFormatException e) {
             return ui.printError("Invalid Task! Cannot unmark task.");
-        } catch (IndexOutOfBoundsException e) {
-            return ui.printError("Invalid Task! Cannot unmark task.");
         }
+        return s;
     }
 
     /**
@@ -131,22 +136,25 @@ public class Cortex {
      * @param command contains the information of the task number and updates task file.
      */
     public StringBuilder deleteTask(String command) {
+        StringBuilder s = new StringBuilder();
         try {
-            int i = parser.parseDeleteCommand(command);
+            List<Integer> indices = parser.parseMultipleIndices(parser.parseDeleteCommand(command));
+            indices.sort(Comparator.reverseOrder());
 
-            try {
-                Task t = list.getTask(i);
-                list.deleteTask(i);
-                storage.saveTasks(list.getAllTasks());
-                return ui.printDeletedTask(t, list.getAllTasks());
-            } catch (DukeException e) {
-                return ui.printError(e.getMessage());
+            for (int i : indices) {
+                try {
+                    Task t = list.getTask(i);
+                    list.deleteTask(i);
+                    s.append(ui.printDeletedTask(t,list.getAllTasks()));
+                } catch (DukeException | IndexOutOfBoundsException e) {
+                    s.append(ui.printError("Invalid Task! Cannot delete task."));
+                }
             }
+            storage.saveTasks(list.getAllTasks());
         } catch (NumberFormatException e) {
-            return ui.printError("Invalid Task! Cannot unmark task.");
-        } catch (IndexOutOfBoundsException e) {
-            return ui.printError("Invalid Task! Cannot unmark task.");
+            return ui.printError("Invalid Task! Cannot delete task.");
         }
+        return s;
     }
 
     /**

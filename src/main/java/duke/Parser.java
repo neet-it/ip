@@ -3,6 +3,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -17,8 +19,8 @@ public class Parser {
      * @param command Includes task number in a string.
      * @return task number.
      */
-    public int parseMarkCommand(String command) {
-        return Integer.parseInt(command.substring(5).trim()) - 1;
+    public String parseMarkCommand(String command) {
+        return command.substring(5).trim();
     }
 
     /**
@@ -27,8 +29,8 @@ public class Parser {
      * @param command Includes task number in a string.
      * @return task number.
      */
-    public int parseUnmarkCommand(String command) {
-        return Integer.parseInt(command.substring(7).trim()) - 1;
+    public String parseUnmarkCommand(String command) {
+        return command.substring(7).trim();
     }
 
     /**
@@ -37,8 +39,27 @@ public class Parser {
      * @param command Includes task number in a string.
      * @return task number.
      */
-    public int parseDeleteCommand(String command) {
-        return Integer.parseInt(command.substring(7).trim()) - 1;
+    public String parseDeleteCommand(String command) {
+        return command.substring(7).trim();
+    }
+
+    public List<Integer> parseMultipleIndices(String command) throws NumberFormatException {
+        List<Integer> indices = new ArrayList<>();
+        String[] parts = command.split("\\s+"); // split by space
+
+        for (String part : parts) {
+            if (part.contains("-")) {
+                String[] range = part.split("-");
+                int start = Integer.parseInt(range[0].trim()) - 1;
+                int end = Integer.parseInt(range[1].trim()) - 1;
+                for (int i = start; i <= end; i++) {
+                    indices.add(i);
+                }
+            } else {
+                indices.add(Integer.parseInt(part.trim()) - 1);
+            }
+        }
+        return indices;
     }
 
     public String parseFindCommand(String command) {
