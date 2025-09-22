@@ -1,3 +1,2 @@
-T | 1 | read a book
-D | 1 | there | 26/1/2025 1800
-E | 0 | done | 26/1/2025 1800 | 26/1/2025 1805
+T | 1 | Read book
+D | 1 | Lecture Quiz | tomorrow

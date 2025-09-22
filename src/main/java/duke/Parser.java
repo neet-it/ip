@@ -72,7 +72,7 @@ public class Parser {
 
     //Solution below Ai-assisted using ChatGPT
     /**
-     * Parses the task multiple indices to a List<Integer.
+     * Parses the task multiple indices to a list of indices.
      *
      * @param command Includes the multiple task numbers.
      * @return task number as list.

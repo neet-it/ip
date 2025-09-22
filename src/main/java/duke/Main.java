@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 
 /**
  * A GUI for Duke using FXML.
+ * Solution below adapted from https://se-education.org/guides/tutorials/javaFx.html
  */
 public class Main extends Application {
 
@@ -22,7 +23,7 @@ public class Main extends Application {
             AnchorPane ap = fxmlLoader.load();
             Scene scene = new Scene(ap);
             stage.setScene(scene);
-            fxmlLoader.<MainWindow>getController().setDuke(cortex);  // inject the Duke instance
+            fxmlLoader.<MainWindow>getController().setDuke(cortex);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();

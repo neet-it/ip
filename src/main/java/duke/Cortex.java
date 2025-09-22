@@ -119,7 +119,7 @@ public class Cortex {
                 try {
                     Task t = list.getTask(i);
                     list.deleteTask(i);
-                    s.append(ui.printDeletedTask(t,list.getAllTasks()));
+                    s.append(ui.printDeletedTask(t, list.getAllTasks()));
                 } catch (DukeException | IndexOutOfBoundsException e) {
                     s.append(ui.printError("Invalid Task! Cannot delete task."));
                 }

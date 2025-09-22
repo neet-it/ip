@@ -137,7 +137,7 @@ public class Storage {
             LocalDateTime toDateTime = parseDateTime(to);
             return new Event(description, fromDateTime, toDateTime);
         } catch (DateTimeParseException e) {
-            return  new Event(description, from, to);
+            return new Event(description, from, to);
         }
     }
 
