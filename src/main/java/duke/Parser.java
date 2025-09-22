@@ -14,6 +14,33 @@ import java.util.List;
 public class Parser {
 
     /**
+     * Parses the task into a specific task.
+     *
+     * @param command Includes task number in a string.
+     * @return task if a valid task.
+     */
+    public Task parseTaskCommand(String command) {
+        Task task = null;
+        int c = 0;
+        if (command.startsWith("todo")) {
+            c++;
+            task = this.parseTodoCommand(command);
+        } else if (command.startsWith("deadline")) {
+            c++;
+            task = this.parseDeadlineCommand(command);
+        } else if (command.startsWith("event")) {
+            c++;
+            task = this.parseEventCommand(command);
+        }
+
+        if (task == null || c == 0) {
+            return null;
+        } else {
+            return task;
+        }
+    }
+
+    /**
      * Parses the task number to mark as done.
      *
      * @param command Includes task number in a string.

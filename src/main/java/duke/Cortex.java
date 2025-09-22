@@ -21,10 +21,6 @@ public class Cortex {
 
     }
 
-    public static void main(String[] args) {
-        Cortex ob = new Cortex();
-    }
-
     /**
      * Starts the chatbot.
      */
@@ -33,45 +29,23 @@ public class Cortex {
 
         if (command.equalsIgnoreCase("bye")) {
             response.append(ui.printBye());
-
         } else if (command.equalsIgnoreCase("list")) {
             response.append(ui.printList(list.getAllTasks()));
-
         } else if (command.startsWith("mark")) {
             response.append(markTask(command));
-
         } else if (command.startsWith("unmark")) {
             response.append(unmarkTask(command));
-
         } else if (command.startsWith("delete")) {
             response.append(deleteTask(command));
-
         } else if (command.startsWith("find")) {
             response.append(findTask(command));
-
         } else {
-            Task task = null;
-            int c = 0;
-            if (command.startsWith("todo")) {
-                c++;
-                task = parser.parseTodoCommand(command);
-
-            } else if (command.startsWith("deadline")) {
-                c++;
-                task = parser.parseDeadlineCommand(command);
-
-            } else if (command.startsWith("event")) {
-                c++;
-                task = parser.parseEventCommand(command);
-            }
-
+            Task task = parser.parseTaskCommand(command);
             if (task != null) {
                 response.append(addTask(task));
-            }
-            if (c == 0) {
+            } else {
                 response.append(ui.printError("INVALID TASK TYPE"));
             }
-
         }
         response.append(ui.printHorizontalLine());
         return response.toString();
