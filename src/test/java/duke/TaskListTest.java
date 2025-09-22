@@ -11,8 +11,8 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TaskListTest {
     private TaskList taskList;
     private ArrayList<Task> tasks = new ArrayList<>();
-    ;
 
+    //Solution below Ai-assisted using ChatGPT
     @BeforeEach
     public void setUp() {
         tasks = new ArrayList<>();
@@ -32,6 +32,7 @@ public class TaskListTest {
         assertEquals(2, taskList.getAllTasks().size());
     }
 
+    //Solution below Ai-assisted using ChatGPT
     @Test
     public void getTask_invalidIndex_throwsDukeException() {
         DukeException exception = assertThrows(DukeException.class, () -> {
@@ -55,6 +56,7 @@ public class TaskListTest {
         assertEquals("Invalid task index", exception3.getMessage());
     }
 
+    //Solution below Ai-assisted using ChatGPT
     @Test
     public void getAllTasks_returnsCopyOfList() {
         ArrayList<Task> allTasks = taskList.getAllTasks();

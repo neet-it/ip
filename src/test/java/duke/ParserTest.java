@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class ParserTest {
-
+    //Solution below Ai-assisted using ChatGPT
     @Test
     public void parseDateTime_validFormats() {
         LocalDateTime result1 = Parser.parseDateTime("2/12/2024 1800");
@@ -25,6 +25,7 @@ public class ParserTest {
         assertEquals(LocalDateTime.of(2021, 6, 15, 0, 0), result4);
     }
 
+    //Solution below Ai-assisted using ChatGPT
     @Test
     public void parseDateTime_edgeCases() {
         LocalDateTime result1 = Parser.parseDateTime("29/2/2020 1200");
@@ -39,6 +40,7 @@ public class ParserTest {
         assertEquals(LocalDateTime.of(2020, 10, 10, 12, 34), result3);
     }
 
+    //Solution below Ai-assisted using ChatGPT
     @Test
     public void parseDateTime_nullAndEmpty() {
         assertThrows(NullPointerException.class, () -> {

@@ -70,6 +70,13 @@ public class Parser {
         return command.substring(7).trim();
     }
 
+    //Solution below Ai-assisted using ChatGPT
+    /**
+     * Parses the task multiple indices to a List<Integer.
+     *
+     * @param command Includes the multiple task numbers.
+     * @return task number as list.
+     */
     public List<Integer> parseMultipleIndices(String command) throws NumberFormatException {
         List<Integer> indices = new ArrayList<>();
         String[] parts = command.split("\\s+"); // split by space
