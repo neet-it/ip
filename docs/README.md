@@ -1,7 +1,7 @@
 # Cortex User Guide
 
 
-![Ui.png](Ui.png)
+![img.png](Ui.png)
 
 Cortex is a simple chatbot to keep track of your daily tasks.
 
